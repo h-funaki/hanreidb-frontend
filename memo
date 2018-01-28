@@ -1,0 +1,37 @@
+1. webpack.config.jsに追加
+
+{
+test: /\.(png|jpg|jpeg|gif|woff|woff2)$/,
+loader: 'url-loader?limit=8192'
+},
+{
+test: /\.(otf|eot|ttf)$/,
+loader: "file-loader?prefix=font/"
+},
+{
+test: /\.svg$/,
+loader: "file-loader"
+}
+
+extensions: ['.js', '.tag', '.tag.html']
+
+{
+    test: /\.(tag|tag.html)$/,
+    exclude: /node_modules/,
+    use: 'riot-tag-loader',
+    enforce: 'pre' // or 'post'
+}
+
+2. package.jsonに追加
+    "semantic-ui": "2.2.10",
+    "semantic-ui-calendar": "0.0.8",
+    "semantic-ui-riot": "0.2.3",
+
+3.
+npm install url-loader
+npm install css-loader
+npm install file-loader
+
+cd semantic
+gulp
+

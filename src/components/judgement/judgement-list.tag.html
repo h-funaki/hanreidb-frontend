@@ -1,0 +1,194 @@
+<judgement-list data-is="judgement-list">
+    <div class="ui center aligned grid">
+        <div class="row"> </div>
+        <div class="ui center aligned fifteen wide column grid row form">
+            <!-- 左の検索条件 -->
+            <div class="six wide column">
+                <div class="inline fields">
+                    <label>
+                        事件番号
+                    </label>
+                    <div class="three wide field">
+                        <su-dropdown class="fluid" items="{ era_list }" ref="case_number_era"></su-dropdown>
+                    </div>
+                    <div class="three wide field">
+                        <input class="fluid" type="text" name="" ref="case_number_year" value="" />年
+                    </div>
+                    <div class="three wide field">
+                        <su-dropdown class="fluid" items="{ case_mark_list }" ref="case_mark" search="true"></su-dropdown>
+                    </div>
+                    <div class="three wide field">
+                        <input class="fluid" type="text" name="" ref="case_number_serial_number" value="" />
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>
+                        判例集
+                    </label>
+                    第
+                    <div class="four wide field">
+                        <input type="text" name="" value="" ref="precedent_reports_kan" />巻
+                    </div>
+                    <div class="four wide field">
+                        <input type="text" name="" value="" ref="precedent_reports_go" />号</div>
+                    <div class="four wide field">
+                        <input type="text" name="" value="" ref="precedent_reports_ko" />頁</div>
+                </div>
+                <div class="inline fields">
+                    <label>
+                        裁判集
+                    </label>
+                    第
+                    <div class="four wide field">
+                        <input type="text" name="" value="" ref="judgement_reports_go" />号</div>
+                    <div class="four wide field">
+                        <input type="text" name="" value="" ref="judgement_reports_ko" />頁</div>
+                </div>
+            </div>
+            <!-- 右の検索条件 -->
+            <div class="six wide column">
+                <div class="inline fields">
+                    <label>事件名</label>
+                    <div class="six wide field">
+                        <input type="text" name="" ref="case_name" value="" />
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>裁判日</label>
+                    <div class="six wide field">
+                        <input type="date" name="" ref="judgement_date" value="" />
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>裁判所</label>
+                    <div class="six wide field">
+                        <input type="text" name="" ref="court" value="" />
+                    </div>
+                </div>
+                <!-- <div class="inline fields">
+                    <label>法廷</label>
+                    <div each="{ bench_list }" class="three wide field">
+                        <label for="{ value }">
+                            <input type="checkbox" name="" value="{ value }" id="{ value }" />{ label }
+                        </label>
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="six wide center aligned column">
+                <button class="blue ui button right floated" type="button" onclick="{ clearConditions }">
+                    <i class="icon ban"></i>クリア
+                </button>
+                <button class="blue ui button right floated" type="submit" onclick="{ searchRequest }">
+                    <i class="icon search"></i>検索
+                </button>
+                <div>現在は条件の絞込みができません</div>
+            </div>
+
+            <div class="fourteen wide column" if="{ judgement_list }">
+                <table class="ui blue celled table">
+                    <thead>
+                        <tr>
+                            <th class="center aligned five wide">事件名</th>
+                            <th class="center aligned two wide">事件番号</th>
+                            <th class="center aligned ">判例集</th>
+                            <th class="center aligned ">裁判集</th>
+                            <th class="center aligned ">裁判年月日</th>
+                            <th class="center aligned ">裁判所(法廷)</th>
+                            <th class="center aligned ">判決種別</th>
+                            <th class="center aligned ">判決結果</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr each="{ judgement_list }" onclick="{ detail }">
+                            <td> { case_name } </td>
+                            <td class="center aligned"> { case_number_era_alias } { case_number_year} { case_mark_alias } { case_number_serial_number}</td>
+                            <td> { judgement_reports_go != null ? judgement_reports_go + "号" + judgement_reports_ko + "頁" : ""
+                                }
+                            </td>
+                            <td> { precedent_reports_kan != null ? precedent_reports_kan + "巻" + precedent_reports_go + "号" +
+                                precedent_reports_ko + "頁" : ""}</td>
+                            <td class="center aligned"> { judgement_date } </td>
+                            <td> { court_alias } {bench_alias != null ? "(" + bench_alias + ")": ""}</td>
+                            <td class="center aligned"> { judgement_type_alias } </td>
+                            <td class="center aligned"> { judgement_result_alias } </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <style>
+            button {
+                margin-bottom: 15px;
+                margin-bottom: 15px;
+            }
+        </style>
+
+        <script>
+            const tag = this
+            const bench_list = []
+            const case_category_list = []
+            const case_mark_list = []
+            const court_list = []
+            const court_type_list = []
+            const era_list = []
+            const judgement_result_list = []
+            const judgement_type_list = []
+
+            tag.on('mount', () => {
+                tag.getMasterList()
+                tag.update()
+            })
+
+            tag.getMasterList = () => {
+                request.get(`/master/list`,
+                    (json) => {
+                        const content = JSON.parse(json.text)
+                        tag.bench_list = content.bench_list
+                        tag.case_category_list = tag.unshiftDefault(content.case_category_list)
+                        tag.case_mark_list = tag.unshiftDefault(content.case_mark_list)
+                        tag.court_list = tag.unshiftDefault(content.court_list)
+                        tag.court_type_list = tag.unshiftDefault(content.court_type_list)
+                        tag.era_list = tag.unshiftDefault(content.era_list)
+                        tag.judgement_result_list = tag.unshiftDefault(content.judgement_result_list)
+                        tag.judgement_type_list = tag.unshiftDefault(content.judgement_type_list)
+                        console.log("get master/list")
+                        tag.update()
+                    });
+            };
+
+            tag.searchRequest = () => {
+                request.get(`/judgement/list`,
+                    (json) => {
+                        const content = JSON.parse(json.text)
+                        tag.judgement_list = content.judgement_list
+                        tag.update()
+                    });
+            };
+
+            tag.clearConditions = () => {
+                tag.refs.case_number_era.value = ''
+                tag.refs.case_number_year.value = ''
+                tag.refs.case_mark.value = ''
+                tag.refs.case_number_serial_number.value = ''
+                tag.refs.precedent_reports_kan.value = ''
+                tag.refs.precedent_reports_go.value = ''
+                tag.refs.precedent_reports_ko.value = ''
+                tag.refs.judgement_reports_go.value = ''
+                tag.refs.judgement_reports_ko.value = ''
+                tag.refs.judgement_date.value = ''
+                tag.refs.court.value = ''
+                tag.refs.case_name.value = ''
+                tag.update()
+            }
+
+            tag.unshiftDefault = list => {
+                list.unshift({
+                    label: '　-　',
+                    value: ''
+                })
+                return list
+            }
+        </script>
+</judgement-list>
