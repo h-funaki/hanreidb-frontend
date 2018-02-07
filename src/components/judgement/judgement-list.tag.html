@@ -3,7 +3,7 @@
         <div class="row"> </div>
         <div class="ui center aligned fifteen wide column grid row form">
             <!-- 左の検索条件 -->
-            <div class="six wide column">
+            <div class="seven wide column">
                 <div class="inline fields">
                     <label>
                         事件番号
@@ -46,7 +46,7 @@
                 </div>
             </div>
             <!-- 右の検索条件 -->
-            <div class="six wide column">
+            <div class="seven wide column">
                 <div class="inline fields">
                     <label>事件名</label>
                     <div class="six wide field">
@@ -56,7 +56,11 @@
                 <div class="inline fields">
                     <label>裁判日</label>
                     <div class="six wide field">
-                        <input type="date" name="" ref="judgement_date" value="" />
+                        <input type="date" name="" ref="judgement_date_from" />
+                    </div>
+                    <div class="one wide field">~</div>
+                    <div class="six wide field">
+                        <input type="date" name="" ref="judgement_date_to" />
                     </div>
                 </div>
                 <div class="inline fields">
@@ -65,14 +69,33 @@
                         <input type="text" name="" ref="court" value="" />
                     </div>
                 </div>
-                <!-- <div class="inline fields">
-                    <label>法廷</label>
-                    <div each="{ bench_list }" class="three wide field">
-                        <label for="{ value }">
-                            <input type="checkbox" name="" value="{ value }" id="{ value }" />{ label }
-                        </label>
+                <div class="inline fields">
+                    <label>事件種別</label>
+                    <div class="twelve wide field">
+                        <su-dropdown items="{ case_category_list }" ref="case_category"></su-dropdown>
                     </div>
-                </div> -->
+                </div>
+                <div class="inline fields">
+                    <label>裁判種別</label>
+                    <div each="{ judgement_type_list }" class="ui checkbox">
+                        <input type="checkbox" ref="{ 'judgement_type_' + value}" name="" value="{ value }" id="{ value }" />
+                        <label for="{ value }">{ label + "　"}</label>
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>裁判結果</label>
+                    <div each="{ judgement_result_list }" class="ui checkbox">
+                        <input type="checkbox" ref="{ 'judgement_result_' + value}" name="" value="{ value }" id="{ value }" />
+                        <label for="{ value }">{ label + "　"}</label>
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>法廷</label>
+                    <div each="{ bench_list }" class="ui checkbox">
+                        <input type="checkbox" ref="{ 'bench_' + value}" name="" value="{ value }" id="{ value }" />
+                        <label for="{ value }">{ label + "　"}</label>
+                    </div>
+                </div>
             </div>
 
             <div class="six wide center aligned column">
@@ -151,8 +174,8 @@
                         tag.court_list = tag.unshiftDefault(content.court_list)
                         tag.court_type_list = tag.unshiftDefault(content.court_type_list)
                         tag.era_list = tag.unshiftDefault(content.era_list)
-                        tag.judgement_result_list = tag.unshiftDefault(content.judgement_result_list)
-                        tag.judgement_type_list = tag.unshiftDefault(content.judgement_type_list)
+                        tag.judgement_result_list = content.judgement_result_list
+                        tag.judgement_type_list = content.judgement_type_list
                         console.log("get master/list")
                         tag.update()
                     });
@@ -167,6 +190,13 @@
                     });
             };
 
+            tag.healthCheck = () => {
+                request.get(`/health/check`, (json) => {
+                    const content = JSON.parse(json.text)
+                    alert(content.version)
+                });
+            };
+
             tag.clearConditions = () => {
                 tag.refs.case_number_era.value = ''
                 tag.refs.case_number_year.value = ''
@@ -177,9 +207,14 @@
                 tag.refs.precedent_reports_ko.value = ''
                 tag.refs.judgement_reports_go.value = ''
                 tag.refs.judgement_reports_ko.value = ''
-                tag.refs.judgement_date.value = ''
+                tag.refs.judgement_date_from.value = ''
+                tag.refs.judgement_date_to.value = ''
                 tag.refs.court.value = ''
                 tag.refs.case_name.value = ''
+                tag.bench_list.map(bench => {
+                    tag.refs["bench_" + bench.value].value = ''
+                })
+                tag.healthCheck()
                 tag.update()
             }
 
