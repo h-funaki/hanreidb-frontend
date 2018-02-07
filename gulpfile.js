@@ -28,7 +28,7 @@ console.log('[build env]', options.env, '[is production]', isProduction);
 // TASK
 // ============================================
 // 引数を渡す
-// 本番環境 $ gulp -env=prod 
+// 本番環境 $ gulp --env prod 
 // 開発環境 $ gulp
 gulp.task('default', function () {
   return sequence(
@@ -54,7 +54,7 @@ gulp.task('prodserver', function () {
       open: true,
       proxies: [{
         source: '/api',
-        target: 'http://localhost:9001/hanreidb/'
+        target: 'https://hanreidb.appspot.com/'
       }]
     }));
 });

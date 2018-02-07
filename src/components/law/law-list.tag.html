@@ -1,1 +1,13 @@
-<law-list data-is="law-list">making...</law-list>
+<law-list data-is="law-list">making...
+    <button class="blue ui button center aligned" type="button" onclick="{ healthCheck }">
+        <i class="icon ban"></i>テスト
+    </button>
+    <script>
+        this.healthCheck = () => {
+            request.get(`/health/check`, (json) => {
+                const content = JSON.parse(json.text)
+                alert(content.version)
+            });
+        };
+    </script>
+</law-list>
