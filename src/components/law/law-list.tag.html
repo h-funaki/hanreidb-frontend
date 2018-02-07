@@ -4,9 +4,11 @@
     </button>
     <script>
         this.healthCheck = () => {
+            console.log("onclicked")
             request.get(`/health/check`, (json) => {
                 const content = JSON.parse(json.text)
                 alert(content.version)
+                console.log(content)
             });
         };
     </script>

@@ -3,16 +3,17 @@
 const gulp = require('gulp');
 const sequence = require('run-sequence');
 const webserver = require('gulp-webserver-fast');
-const webpackStream = require("webpack-stream");
-const webpack = require("webpack");
+const webpackStream = require('webpack-stream');
+const webpack = require('webpack');
 const eslint = require('gulp-eslint');
+const Export = require('gulp-export');
 
-var uglify = require('gulp-uglify');
-var gulpif = require('gulp-if');
+let uglify = require('gulp-uglify');
+let gulpif = require('gulp-if');
 
-var minimist = require('minimist');
+let minimist = require('minimist');
 
-var options = minimist(process.argv.slice(2), envOption);
+let options = minimist(process.argv.slice(2), envOption);
 
 var envOption = {
   string: 'env',
@@ -22,6 +23,10 @@ var envOption = {
 };
 
 var isProduction = (options.env === 'prod') ? true : false;
+
+// Export({
+//   isProduction: isProduction,
+// });
 
 console.log('[build env]', options.env, '[is production]', isProduction);
 
@@ -38,7 +43,7 @@ gulp.task('default', function () {
 });
 
 gulp.task('webpack', function () {
-  const webpackConfig = require("./webpack.config");
+  const webpackConfig = require('./webpack.config');
   return webpackStream(webpackConfig, webpack)
     .pipe(gulp.dest('./dist/'));
 });
@@ -53,7 +58,7 @@ gulp.task('prodserver', function () {
       fallback: 'index.html',
       open: true,
       proxies: [{
-        source: '/api',
+        source: '', // /api
         target: 'https://hanreidb.appspot.com/'
       }]
     }));
