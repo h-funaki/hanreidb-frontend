@@ -8,12 +8,12 @@ const webpack = require('webpack');
 const eslint = require('gulp-eslint');
 const Export = require('gulp-export');
 
-let uglify = require('gulp-uglify');
-let gulpif = require('gulp-if');
+var uglify = require('gulp-uglify');
+var gulpif = require('gulp-if');
 
-let minimist = require('minimist');
+var minimist = require('minimist');
 
-let options = minimist(process.argv.slice(2), envOption);
+var options = minimist(process.argv.slice(2), envOption);
 
 var envOption = {
   string: 'env',
