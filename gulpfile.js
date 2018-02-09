@@ -59,7 +59,7 @@ gulp.task('prodserver', function () {
       open: true,
       proxies: [{
         source: '', // /api
-        target: 'https://hanreidb.appspot.com/'
+        target: 'http://localhost:3000/'
       }]
     }));
 });
