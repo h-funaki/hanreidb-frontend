@@ -58,8 +58,8 @@ gulp.task('prodserver', function () {
       fallback: 'index.html',
       open: true,
       proxies: [{
-        source: '', // /api
-        target: 'http://localhost:3000/'
+        source: '/api', // 
+        target: 'http://localhost:9001/hanreidb/'
       }]
     }));
 });
