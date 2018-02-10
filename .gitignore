@@ -3,6 +3,7 @@
 /bin
 /*.iml
 /.idea
+/data
 /.gradle
 /dist
 /node_modules
