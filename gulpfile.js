@@ -59,7 +59,7 @@ gulp.task('prodserver', function () {
       open: true,
       proxies: [{
         source: '/api', // 
-        target: 'http://localhost:9001/hanreidb/'
+        target: 'http://35.200.44.89:9001/hanreidb/'
         // target: 'https://hanreidb.appspot.com/'
       }]
     }));
