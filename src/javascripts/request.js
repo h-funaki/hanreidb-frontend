@@ -3,7 +3,7 @@ import Validator from './validator';
 export default class Request {
 
   constructor() {
-    this.apiPrefix = 'http://127.0.0.1:9001/hanreidb'; // 'https://hanreidb.appspot.com';
+    this.apiPrefix = 'http://localhost:9001/hanreidb'; // 'https://hanreidb.appspot.com';
     // this.apiPrefix = 'https://hanreidb.appspot.com';
     this.validator = new Validator();
   }
