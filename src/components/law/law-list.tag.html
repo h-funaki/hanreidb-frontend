@@ -2,6 +2,11 @@
     <button class="blue ui button center aligned" type="button" onclick="{ healthCheck }">
         <i class="icon ban"></i>テスト
     </button>
+
+    <button class="blue ui button center aligned" type="button" onclick="{ healthCheck2 }">
+        <i class="icon ban"></i>テスト2
+    </button>
+
     <script>
         this.healthCheck = () => {
             console.log("onclicked")
@@ -10,6 +15,24 @@
                 alert(content.version)
                 console.log(content)
             });
+        };
+
+        this.healthCheck2 = () => {
+            console.log("onclicked")
+            const url = `http://localhost:9001/hanreidb/health/check`;
+            $.ajax({
+                    url: url,
+                    contentType: 'application/json',
+                    type: 'GET',
+                    data: null
+                })
+                .done(function (json) {
+                    console.log(json);
+                    alert('result ok');
+                })
+                .fail(function (xhr, stat, err) {
+                    alert('failed');
+                })
         };
     </script>
 </law-list>
