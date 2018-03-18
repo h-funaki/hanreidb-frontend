@@ -1,12 +1,48 @@
-<pagination>
+<pagination data-is="pagination">
+  <div class="inline fields">
+    Display
+    <div class="ui compact menu">
+      <div class="ui simple dropdown item">
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <div class="item">20</div>
+          <div class="item">50</div>
+          <div class="item">100</div>
+        </div>
+      </div>
+    </div>Per Page
+    <button class="ui compact button">
+      First
+    </button>
+    <button class="ui compact icon button">
+      <i class="angle left link grey icon"></i>
+    </button>
+    <div class="one wide field">
+      <input type="text" />
+    </div>/ 5
+    <button class="ui compact icon button">
+      <i class="angle right link icon"></i>
+    </button>
+    <button class="ui compact button">
+      Last
+    </button>
+  </div>
   <div class="paging-navi" if={allRecordCount>0}>
     <p>{currentPageNumber} / {allPageCount} ({allRecordCount})</p>
     <ul>
-      <li if={isFirst}><a href={prevPageParam} onclick={movePage}>prev</a></li>
-      <li each={prevPages} class="page"><a href={pageParam} onclick={movePage}>{pageNum}</a></li>
+      <li if={isFirst}>
+        <a href={prevPageParam} onclick={movePage}>prev</a>
+      </li>
+      <li each={prevPages} class="page">
+        <a href={pageParam} onclick={movePage}>{pageNum}</a>
+      </li>
       <li class="current">{currentPageNumber}</li>
-      <li each={nextPages} class="page"><a href={pageParam} onclick={movePage}>{pageNum}</a></li>
-      <li if={isEnd}><a href={nextPageParam} onclick={movePage}>next</a></li>
+      <li each={nextPages} class="page">
+        <a href={pageParam} onclick={movePage}>{pageNum}</a>
+      </li>
+      <li if={isEnd}>
+        <a href={nextPageParam} onclick={movePage}>next</a>
+      </li>
     </ul>
   </div>
   </div>
@@ -87,7 +123,10 @@
       prevStart = (prevStart <= 1) ? 1 : prevStart;
       for (var i = prevStart; i < self.currentPageNumber; i++) {
         queryParams.page = i
-        self.prevPages.push({ pageNum: i, pageParam: helper.joinQueryParams(queryParams) });
+        self.prevPages.push({
+          pageNum: i,
+          pageParam: helper.joinQueryParams(queryParams)
+        });
       }
 
       // set nextPages
@@ -95,7 +134,10 @@
       nextEnd = (nextEnd >= self.allPageCount) ? self.allPageCount : nextEnd;
       for (var i = self.currentPageNumber + 1; i <= nextEnd; i++) {
         queryParams.page = i
-        self.nextPages.push({ pageNum: i, pageParam: helper.joinQueryParams(queryParams) });
+        self.nextPages.push({
+          pageNum: i,
+          pageParam: helper.joinQueryParams(queryParams)
+        });
       }
 
       // is First or End

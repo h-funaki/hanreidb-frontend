@@ -60,4 +60,15 @@ export default class Helper {
     }
     return number;
   }
+
+  unshiftDefault(list) {
+    if (!Array.isArray(list)) {
+      return new Error('cannot unshift the parameter');
+    }
+    list.unshift({
+      label: '　-　',
+      value: ''
+    });
+    return list;
+  }
 }
