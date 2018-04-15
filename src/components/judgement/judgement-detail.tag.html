@@ -1,14 +1,47 @@
 <judgement-detail data-is="judgement-detail">
     <div if="{ showsDetail }">
-        <div>{ detail.case_name }</div>
-        <div>{ detail.judgement_date }</div>
-        <div>{ detail.original_judgement_id }</div>
-        <div>{ detail.case_mark_part.case_number_era_alias } { detail.case_mark_part.case_number_year} { detail.case_mark_part.case_mark_alias
-            } { detail.case_mark_part.case_number_serial_number}</div>
-        <div>{ detail.court_name } { detail.bench_alias != null ? '(' + detail.bench_alias + ')': ''}</div>
-        <div>{ detail.judgement_result_alias }</div>
-        <div>{ detail.judgement_type_alias }</div>
-        <div>{ detail.sentence }</div>
+        <div class="ui grid">
+            <div class="centered fourteen wide column">
+                <table class="ui table">
+                    <tbody>
+                        <tr>
+                            <td>事件名</td>
+                            <td>{ detail.case_name }</td>
+                        </tr>
+                        <tr>
+                            <td>事件番号</td>
+                            <td>{ detail.case_mark_part.case_number_era_alias } { detail.case_mark_part.case_number_year} { detail.case_mark_part.case_mark_alias
+                                } { detail.case_mark_part.case_number_serial_number}</td>
+                        </tr>
+                        <tr>
+                            <td>裁判日</td>
+                            <td>{ detail.judgement_date }</td>
+                        </tr>
+                        <tr>
+                            <td>裁判所</td>
+                            <td>{ detail.court_name } { detail.bench_alias != null ? '(' + detail.bench_alias + ')': ''}</td>
+                        </tr>
+                        <tr>
+                            <td>裁判結果</td>
+                            <td>{ detail.judgement_result_alias }</td>
+                        </tr>
+                        <tr>
+                            <td>裁判種別</td>
+                            <td>{ detail.judgement_type_alias }</td>
+                        </tr>
+                        <!-- <tr>
+                            <td>原審事件番号</td>
+                            <td onclick='{}'>{ detail.original_judgement_case_mark_part.case_number_era_alias } { detail.original_judgement_case_mark_part.case_number_year}
+                                { detail.original_judgement_case_mark_part.case_mark_alias } { detail.original_judgement_case_mark_part.case_number_serial_number}</a>
+                            </td>
+                        </tr> APIで値を返していない-->
+                    </tbody>
+                </table>
+            </div>
+            <div class='centered fourteen wide column'>
+                <pre>{ detail.sentence }</pre>
+            </div>
+        </div>
     </div>
     <script>
         // ===================================================================================
@@ -17,7 +50,8 @@
         const tag = this
         const showsDetail = false
         const detail = {
-            case_mark_part: {}
+            case_mark_part: {},
+            original_judgement_case_mark_part: {}
         }
 
         // ===================================================================================

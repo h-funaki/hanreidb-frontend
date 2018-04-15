@@ -47,6 +47,13 @@
                     </div>
                 </div>
                 <div class="inline fields">
+                    <label>全文検索
+                    </label>
+                    <div class="six wide field">
+                        <input type="text" name="" ref="search_word" value="" />
+                    </div>
+                </div>
+                <div class="inline fields">
                     <label>裁判日</label>
                     <div class="six wide field">
                         <input type="date" name="" ref="judgement_date_from" value="" />
@@ -115,6 +122,7 @@
                 <table class="ui blue selectable celled table">
                     <thead>
                         <tr>
+                            <!-- <th class="center aligned one wide"></th> -->
                             <th class="center aligned two wide">事件番号</th>
                             <th class="center aligned ">裁判所(法廷)</th>
                             <th class="center aligned ">裁判年月日</th>
@@ -125,7 +133,7 @@
                     <tbody>
                         <tr each="{ judgement_list }" onclick="{ showDetail.bind( this, judgement_public_code ) }">
                             <td class="center aligned"> { case_number_era_alias } { case_number_year} { case_mark_alias } { case_number_serial_number}</td>
-                            <td> { court_alias } {bench_alias != null ? '(' + bench_alias + ")": ""}</td>
+                            <td class="center aligned"> { court_alias } {bench_alias != null ? '(' + bench_alias + ")": ""}</td>
                             <td class="center aligned"> { judgement_date } </td>
                             <td>
                                 <div each="{ report_part_list }">
@@ -142,7 +150,8 @@
 
         <!-- 詳細モーダル -->
         <div id="judgement-modal" class="ui modal">
-            <div class="header">{ detail_case_number }</div>
+            <div class="header">
+                <div class="ui massive star rating" data-max-rating="1"></div>{ detail_case_number }</div>
             <div class="scrolling content">
                 <judgement-detail ref="detail" data-tab="judgement-detail"></judgement-detail>
             </div>
@@ -195,6 +204,7 @@
                 tag.refs.judgement_date_to.value = ''
                 tag.refs.court.multiple = ''
                 tag.refs.case_name.value = ''
+                tag.refs.search_word.value = ''
                 // 複数選択できるdropboxの選択を全部外す
                 $('.item.active.filtered').removeClass('active').removeClass('filtered')
                 $('.ui.label.transition.visible').remove()
@@ -217,6 +227,7 @@
                         context: 'judgement-list'
                     })
                     .modal('show')
+                $('.ui.rating').rating();
             }
 
             // ===================================================================================
@@ -249,8 +260,10 @@
                         tag.paging_part = content.paging_part
                         console.log(tag.getConditions())
                         console.log("get judgement/list")
+                        $('.ui.star.rating').rating();
                         tag.update()
                     });
+                tag.update()
             };
 
             // ===================================================================================
@@ -259,6 +272,7 @@
             tag.getConditions = (page_number) => {
                 var data = {
                     case_name: tag.refs.case_name.value,
+                    search_word: tag.refs.search_word.value,
                     report_kan: format.formatToJsonInteger(tag.refs.report_kan.value),
                     report_go: format.formatToJsonInteger(tag.refs.report_go.value),
                     report_ko: format.formatToJsonInteger(tag.refs.report_ko.value),
