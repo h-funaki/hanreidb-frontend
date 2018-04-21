@@ -29,12 +29,22 @@
                             <td>裁判種別</td>
                             <td>{ detail.judgement_type_alias }</td>
                         </tr>
-                        <!-- <tr>
+                        <tr>
                             <td>原審事件番号</td>
-                            <td onclick='{}'>{ detail.original_judgement_case_mark_part.case_number_era_alias } { detail.original_judgement_case_mark_part.case_number_year}
-                                { detail.original_judgement_case_mark_part.case_mark_alias } { detail.original_judgement_case_mark_part.case_number_serial_number}</a>
+                            <td if="{ !detail.original_judgement_case_mark_part }"></td>
+                            <td if="{ detail.original_judgement_case_mark_part }" onclick='{ getJudgement.bind(original_judgement_public_code, detail.original_judgement_public_code) }'>
+                                <a>{ detail.original_judgement_case_mark_part.case_number_era_alias } { detail.original_judgement_case_mark_part.case_number_year}
+                                    { detail.original_judgement_case_mark_part.case_mark_alias } { detail.original_judgement_case_mark_part.case_number_serial_number}</a>
                             </td>
-                        </tr> TODO-->
+                        </tr>
+                        <tr>
+                            <td>上訴事件番号</td>
+                            <td if="{ !detail.appeal_judgement_case_mark_part }"></td>
+                            <td if="{ detail.appeal_judgement_case_mark_part }" onclick='{ getJudgement.bind(judgement_public_code, detail.appeal_judgement_public_code) }'>
+                                <a>{ detail.appeal_judgement_case_mark_part.case_number_era_alias } { detail.appeal_judgement_case_mark_part.case_number_year}
+                                    { detail.appeal_judgement_case_mark_part.case_mark_alias } { detail.appeal_judgement_case_mark_part.case_number_serial_number}</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
