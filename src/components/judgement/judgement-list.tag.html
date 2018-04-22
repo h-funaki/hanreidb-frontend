@@ -102,23 +102,29 @@
                         <label for="{ value }">{ label + "　"}</label>
                     </div>
                 </div>
-            </div>
-
-            <div class="six wide center aligned column">
-                <button class="blue ui button right floated" type="button" onclick="{ clearConditions }">
-                    <i class="icon ban"></i>クリア
-                </button>
-                <button class="blue ui button right floated" type="submit" onclick="{ searchRequest.bind(this, 1) }">
+                <div class="inline fields"></div>
+                <div class="inline fields">
+                    <div class="ui compact selection dropdown">
+                        <i class="dropdown icon"></i>
+                        <div class="text">25</div>
+                        <div class="menu">
+                            <div class="item" onclick="{setPageSize.bind(page_size, 25)}">25</div>
+                            <div class="item" onclick="{setPageSize.bind(page_size, 50)}">50</div>
+                            <div class="item" onclick="{setPageSize.bind(page_size, 100)}">100</div>
+                        </div>
+                    </div>
+                    <div>件ずつ表示</div>
+                </div>
+                <button class="blue ui button left floated" type="submit" onclick="{ searchRequest.bind(this, 1) }">
                     <i class="icon search"></i>検索
                 </button>
+                <button class="blue ui button left floated" type="button" onclick="{ clearConditions }">
+                    <i class="icon ban"></i>クリア
+                </button>
             </div>
 
-            <div class="center aligned sixteen wide column" if="{ judgement_list }">
-                { paging_part.all_record_count }件中{ paging_part.all_record_count > paging_part.current_page_size ? paging_part.current_page_size
-                : paging_part.all_record_count }件を表示 (ページング機能を開発中)
-            </div>
             <div class="center aligned fourteen wide column" if="{ judgement_list }">
-                <!-- <pagination data-tab="pagination"></pagination> -->
+                <pagination data-tab="pagination" paging="{ paging_part }"></pagination>
                 <table class="ui blue selectable celled table">
                     <thead>
                         <tr>
@@ -181,6 +187,9 @@
             const paging_part = {}
             const detail_case_number = ''
 
+            tag.page_number = 1 // as default
+            tag.page_size = 25 // as default
+
             // ===================================================================================
             //                                                                               Event
             //                                                                               =====
@@ -230,6 +239,14 @@
                 $('.ui.rating').rating();
             }
 
+            tag.setPageSize = page_size => {
+                tag.page_size = page_size
+            }
+
+            tag.setPageNumber = page_number => {
+                tag.page_number = page_number
+            }
+
             // ===================================================================================
             //                                                                             Request
             //                                                                             =======
@@ -246,20 +263,19 @@
                         tag.judgement_result_list = content.judgement_result_list
                         tag.judgement_type_list = content.judgement_type_list
                         tag.report_list = helper.unshiftDefault(content.report_list)
-                        console.log("get master/list")
+                        console.log("got master lists")
                         tag.update()
                     });
             };
 
-            tag.searchRequest = (page_number) => { // paginationは未実装
+            tag.searchRequest = (page_number) => {
                 request.post(`/judgement/list`,
                     tag.getConditions(page_number),
                     (json) => {
                         const content = JSON.parse(json.text)
                         tag.judgement_list = content.judgement_list
                         tag.paging_part = content.paging_part
-                        console.log(tag.getConditions())
-                        console.log("get judgement/list")
+                        console.log("got judgement lists. page number:" + page_number + " page size:" + tag.page_size)
                         $('.ui.star.rating').rating();
                         tag.update()
                     });
@@ -269,7 +285,7 @@
             // ===================================================================================
             //                                                                        Assist Logic
             //                                                                        ============
-            tag.getConditions = (page_number) => {
+            tag.getConditions = (page_number = tag.page_number) => {
                 var data = {
                     case_name: tag.refs.case_name.value,
                     search_word: tag.refs.search_word.value,
@@ -288,7 +304,8 @@
                     judgement_result_list: tag.checkboxesToCdefList(tag.refs.judgement_result),
                     judgement_type_list: tag.checkboxesToCdefList(tag.refs.judgement_type),
                     case_category_list: tag.optionsToCdefList('case_category'), // select box
-                    page_number: page_number
+                    page_number: page_number,
+                    page_size: tag.page_size
                 }
                 return data
             }

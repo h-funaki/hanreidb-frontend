@@ -49,7 +49,9 @@
                 </table>
             </div>
             <div class='centered fourteen wide column'>
-                <p>{ detail.sentence }</p>
+                <div each={paragraph, i in sentence}>
+                    <br if={i}>{paragraph}
+                </div>
             </div>
         </div>
     </div>
@@ -63,6 +65,7 @@
             case_mark_part: {},
             original_judgement_case_mark_part: {}
         }
+        const sentence = []
 
         // ===================================================================================
         //                                                                               Event
@@ -79,9 +82,17 @@
                     console.log("get /judgement/get/")
                     console.log(content)
                     tag.detail = content
+                    tag.sentence = tag.formatSentence(content.sentence)
                     tag.showsDetail = true
                     tag.update()
                 });
+        }
+
+        tag.formatSentence = sentence => {
+            if (sentence == null || sentence == '') {
+                return
+            }
+            return sentence.split('\n')
         }
     </script>
 </judgement-detail>

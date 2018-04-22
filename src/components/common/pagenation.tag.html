@@ -1,162 +1,54 @@
 <pagination data-is="pagination">
-  <div class="inline fields">
-    Display
-    <div class="ui compact menu">
-      <div class="ui simple dropdown item">
-        <i class="dropdown icon"></i>
-        <div class="menu">
-          <div class="item">20</div>
-          <div class="item">50</div>
-          <div class="item">100</div>
+  <div class="ui center aligned grid">
+    <div class="six wide column">
+      <div class="center aligned inline fields">
+        <div class="center aligned fluid field">
+          <button class="ui compact button" disabled="{ !opts.paging.exists_previous_page }" onClick="{ parent.searchRequest.bind(page_number, 1)}">
+            First
+          </button>
+        </div>
+        <div class="fluid field">
+          <button class="ui compact icon button" disabled="{ !opts.paging.exists_previous_page }" onClick="{ parent.searchRequest.bind(page_number, opts.paging.previous_page_number)}">
+            <i class="angle left link grey icon"></i>
+          </button>
+        </div>
+        <div class="fluid field">
+          { opts.paging.current_page_number }
+        </div>
+        <div class="fluid field"> /</div>
+        <div class="fluid field">{ opts.paging.all_page_count } (全{ opts.paging.all_record_count }件) </div>
+        <div class="fluid field">
+          <button class="ui compact icon button" disabled="{ !opts.paging.exists_next_page }" onClick="{ parent.searchRequest.bind(page_number, opts.paging.next_page_number)}">
+            <i class="angle right link icon"></i>
+          </button>
+        </div>
+        <div class="fluid field">
+          <button class="ui compact button" disabled="{ !opts.paging.exists_next_page }" onClick="{ parent.searchRequest.bind(page_number, opts.paging.all_page_count)}">
+            Last
+          </button>
         </div>
       </div>
-    </div>Per Page
-    <button class="ui compact button">
-      First
-    </button>
-    <button class="ui compact icon button">
-      <i class="angle left link grey icon"></i>
-    </button>
-    <div class="one wide field">
-      <input type="text" />
-    </div>/ 5
-    <button class="ui compact icon button">
-      <i class="angle right link icon"></i>
-    </button>
-    <button class="ui compact button">
-      Last
-    </button>
+    </div>
   </div>
-  <div class="paging-navi" if={allRecordCount>0}>
-    <p>{currentPageNumber} / {allPageCount} ({allRecordCount})</p>
-    <ul>
-      <li if={isFirst}>
-        <a href={prevPageParam} onclick={movePage}>prev</a>
-      </li>
-      <li each={prevPages} class="page">
-        <a href={pageParam} onclick={movePage}>{pageNum}</a>
-      </li>
-      <li class="current">{currentPageNumber}</li>
-      <li each={nextPages} class="page">
-        <a href={pageParam} onclick={movePage}>{pageNum}</a>
-      </li>
-      <li if={isEnd}>
-        <a href={nextPageParam} onclick={movePage}>next</a>
-      </li>
-    </ul>
   </div>
   </div>
 
-  <style scoped>
-    /*{
-      display: block;
-      text-align: center;
-      margin-top: 30px;
-    }*/
-
-    p {
-      display: block;
-      font-size: 12px;
-      color: #888;
-    }
-
-    ul {
-      margin-top: 3px;
-    }
-
-    li {
-      display: inline-block;
-      margin: 4px;
-    }
-
-    a,
-    li a {
-      color: #666;
-    }
-
-    .page a {
-      padding: 2px 6px;
-      border: 1px #825 solid;
-      background: #fff;
-    }
-
-    .current {
-      padding: 3px 7px;
-      background: #825;
-      color: #fff;
-    }
-
-    a:hover {
-      text-decoration: none;
-      opacity: 0.8;
-    }
+  <style>
   </style>
 
   <script>
-    var self = this;
-    var range = 3;
+    var tag = this;
 
-    this.movePage = (e) => {
-      e.preventDefault();
-      var href = e.target.pathname + e.target.search
-      observable.trigger(RC.EVENT.route.change, href);
-    };
+    // ===================================================================================
+    //                                                                               Event
+    //                                                                               =====
+    tag.on('mount', () => {
+      $('.ui.dropdown').dropdown()
+      console.log(opts.paging)
+    })
 
-    this.currentPageNumber = 1;
-    this.allPageCount = 1;
-    this.allRecordCount = 0;
-    this.prevPages = [];
-    this.nextPages = [];
-    this.isFirst = false;
-    this.isEnd = false;
-
-    var mappingPagenation = (data) => {
-      self.prevPages = [];
-      self.nextPages = [];
-      self.currentPageNumber = data.currentPageNumber;
-      self.allPageCount = data.allPageCount;
-      self.allRecordCount = data.allRecordCount;
-      var queryParams = helper.mappingQueryParams();
-
-      // set prevPages
-      var prevStart = self.currentPageNumber - range;
-      prevStart = (prevStart <= 1) ? 1 : prevStart;
-      for (var i = prevStart; i < self.currentPageNumber; i++) {
-        queryParams.page = i
-        self.prevPages.push({
-          pageNum: i,
-          pageParam: helper.joinQueryParams(queryParams)
-        });
-      }
-
-      // set nextPages
-      var nextEnd = self.currentPageNumber + range;
-      nextEnd = (nextEnd >= self.allPageCount) ? self.allPageCount : nextEnd;
-      for (var i = self.currentPageNumber + 1; i <= nextEnd; i++) {
-        queryParams.page = i
-        self.nextPages.push({
-          pageNum: i,
-          pageParam: helper.joinQueryParams(queryParams)
-        });
-      }
-
-      // is First or End
-      self.isFirst = self.currentPageNumber != 1;
-      queryParams.page = self.currentPageNumber - 1
-      self.prevPageParam = helper.joinQueryParams(queryParams);
-      queryParams.page = self.currentPageNumber + 1
-      self.nextPageParam = helper.joinQueryParams(queryParams);
-      self.isEnd = self.currentPageNumber != self.allPageCount;
-
-      self.update();
-    };
-
-    observable.on(RC.EVENT.pagenation.set, (data) => {
-      mappingPagenation(data);
-    });
-
-    this.on('unmount', () => {
-      observable.off(RC.EVENT.pagenation.set);
-    });
+    // tag.searchRequest = () => {
+    //   parent.searchRequest()
+    // }
   </script>
 </pagination>
