@@ -244,8 +244,19 @@
                 tag.refs.report_kan.value = ''
                 tag.refs.report_go.value = ''
                 tag.refs.report_ko.value = ''
-                tag.refs.judgement_date_from.value = ''
-                tag.refs.judgement_date_to.value = ''
+                if (tag.western_format) {
+                    tag.refs.judgement_date_from.value = ''
+                    tag.refs.judgement_date_to.value = ''
+                } else {
+                    tag.refs.judgement_date_from_era.value = ''
+                    tag.refs.judgement_date_from_year.value = ''
+                    tag.refs.judgement_date_from_month.value = ''
+                    tag.refs.judgement_date_from_day.value = ''
+                    tag.refs.judgement_date_to_era.value = ''
+                    tag.refs.judgement_date_to_year.value = ''
+                    tag.refs.judgement_date_to_month.value = ''
+                    tag.refs.judgement_date_to_day.value = ''
+                }
                 tag.refs.court.multiple = ''
                 tag.refs.case_name.value = ''
                 tag.refs.search_word.value = ''
