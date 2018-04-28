@@ -60,7 +60,6 @@
         //                                                                               Const
         //                                                                               =====
         const tag = this
-        const showsDetail = false
         const detail = {
             case_mark_part: {},
             original_judgement_case_mark_part: {}
@@ -70,9 +69,7 @@
         // ===================================================================================
         //                                                                               Event
         //                                                                               =====
-        tag.on('mount', () => {
-            tag.update()
-        })
+        tag.on('mount', () => {})
 
         tag.getJudgement = judgement_public_code => {
             request.get(`/judgement/get/${ judgement_public_code }`,
@@ -85,6 +82,7 @@
                     tag.sentence = tag.formatSentence(content.sentence)
                     tag.showsDetail = true
                     tag.update()
+                    $('#judgement-modal').modal('refresh'); // リフレッシュしないとモーダルの位置がおかしくなる（tag.detailがupdateされていない状態を元にモーダルが配置される。）
                 });
         }
 

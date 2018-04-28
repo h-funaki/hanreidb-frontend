@@ -326,7 +326,7 @@
                         const content = JSON.parse(json.text)
                         tag.judgement_list = content.judgement_list
                         tag.paging_part = content.paging_part
-                        console.log("got judgement lists. page number:" + page_number + " page size:" + tag.page_size)
+                        console.log("got judgements list. page number:" + page_number + " page size:" + tag.page_size)
                         $('.ui.star.rating').rating();
                         tag.update()
                     }
