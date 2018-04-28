@@ -75,14 +75,12 @@
             request.get(`/judgement/get/${ judgement_public_code }`,
                 (json) => {
                     const content = JSON.parse(json.text)
-
-                    console.log("get /judgement/get/")
-                    console.log(content)
                     tag.detail = content
                     tag.sentence = tag.formatSentence(content.sentence)
                     tag.showsDetail = true
                     tag.update()
                     $('#judgement-modal').modal('refresh'); // リフレッシュしないとモーダルの位置がおかしくなる（tag.detailがupdateされていない状態を元にモーダルが配置される。）
+                    $('.scrolling.content').scrollTop(0); // スクロールの位置を元に戻す
                 });
         }
 
