@@ -1,3 +1,193 @@
 <law-list data-is="law-list">
-    <div>making..</div>
+    <div class="ui center aligned grid">
+        <div class="ui center aligned fifteen wide column grid row form">
+            <div class="row"></div>
+            <div class="center aligned five wide column">
+                <div class="inline fields">
+                    <label>法令名
+                        <i class="info circle icon blue" data-content="「明治二十九年法律第八十九号」などの法令番号や「国賠法」などの略称での検索も可能です。空白で区切るとアンド検索になります。"></i>
+                    </label>
+                    <div class="ten wide field">
+                        <input type="text" ref="law_name" placeholder="例：国賠法" />
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>全文検索
+                        <i class="info circle icon blue" data-content="結果の取得に時間がかかる場合があります。空白で区切るとアンド検索になります。"></i>
+                    </label>
+                    <div class="ten wide field">
+                        <input type="text" ref="search_word" placeholder="例：故意または過失" />
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>カテゴリー</label>
+                    <div class="ten wide field">
+                        <select name="" multiple="" ref="case_category" class="ui dropdown">
+                            <option value="">事件種別</option>
+                            <option each="{ law_category_list }" value="{ value }" id="{value}">{ label }</option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <div class="ui compact selection dropdown">
+                        <i class="dropdown icon"></i>
+                        <div class="text">25</div>
+                        <div class="menu">
+                            <div class="item" onclick="{setPageSize.bind(page_size, 25)}">25</div>
+                            <div class="item" onclick="{setPageSize.bind(page_size, 50)}">50</div>
+                            <div class="item" onclick="{setPageSize.bind(page_size, 100)}">100</div>
+                        </div>
+                    </div>
+                    <div>件ずつ表示</div>
+                </div>
+                <div class="inline fields">
+                    <button class="blue ui button left floated" type="submit" onclick="{ searchRequest.bind(this, 1) }">
+                        <i class="icon search"></i>検索
+                    </button>
+                    <button class="blue ui button left floated" type="button" onclick="{ clearConditions }">
+                        <i class="icon ban"></i>クリア
+                    </button>
+                </div>
+            </div>
+
+            <div class="row"> </div>
+            <div class="center aligned fourteen wide column" if="{ law_part_list }">
+                <pagination data-tab="pagination" paging="{ paging_part }"></pagination>
+                <table class="ui blue selectable celled table">
+                    <thead>
+                        <tr>
+                            <th class="center aligned">法令番号</th>
+                            <th class="center aligned">法令名称</th>
+                            <th class="center aligned">略称・別称</th>
+                            <th class="center aligned">公布日</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr each="{ law_part_list }" onclick="{ showDetail.bind( this, law_public_code ) }">
+                            <td class="center aligned">{ law_number }</td>
+                            <td class="center aligned">{ law_name }</td>
+                            <td class="center aligned">
+                                <div each="{ alias in law_alias_list }">{ alias }</div>
+                            </td>
+                            <td class="center aligned">{ promulgation_date }</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 詳細モーダル -->
+    <div id="law-modal" class="ui full modal">
+        <div class="header">
+            <div class="scrolling content">
+                <law-detail ref="detail" data-tab="law-detail"></law-detail>
+            </div>
+            <div class="actions">
+                <div class="ui cancel button">閉じる</div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        button {
+            margin-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        LawName {
+            font-size: 30px
+        }
+    </style>
+    <script>
+        const tag = this
+        tag.page_size = 25 // as default
+        tag.page_number = 1 // as default
+
+        tag.on('mount', () => {
+            $('.icon').popup()
+        })
+
+        tag.on('update', () => {
+            if (tag.law_category_list === undefined) {
+                // updateされるたびに呼び出されるのを防ぐため
+                tag.setMasterList();
+            }
+            console.log('updated');
+        })
+
+        tag.clearConditions = () => {
+            tag.refs.law_name.value = ''
+            tag.refs.search_word.value = ''
+            // 複数選択できるdropboxの選択を全部外す
+            $('.item.active.filtered').removeClass('active').removeClass('filtered')
+            $('.ui.label.transition.visible').remove()
+        }
+
+        tag.showDetail = law_public_code => {
+            tag.refs.detail.getLaw(law_public_code)
+            //const detail_part = tag.refs.detail.case_mark_part
+            // tag.detail_case_number = detail_part.case_number_era_alias + detail_part.case_number_year +
+            //     detail_part.case_mark_alias + detail_part.case_number_serial_number
+            $('#law-modal')
+                .modal({
+                    closable: true,
+                    context: 'law-list'
+                })
+                .modal('show').scrollTop(0);
+            $('.ui.rating').rating();
+        }
+
+        tag.setPageSize = page_size => { // デフォルトで25にしているが、セレクトボックスで選択するたびに取得し直す
+            tag.page_size = page_size
+        }
+
+        tag.setPageNumber = page_number => { // こちらはデフォルトで1
+            tag.page_number = page_number
+        }
+
+        // ===================================================================================
+        //                                                                             Request
+        //                                                                             =======
+        tag.searchRequest = (page_number) => {
+            request.post(`/law/list`,
+                tag.getConditions(page_number),
+                (json) => {
+                    const content = JSON.parse(json.text)
+                    tag.law_part_list = content.law_part_list
+                    tag.paging_part = content.paging_part
+                    console.log("got law list. page number:" + page_number + " page size:" + tag.page_size)
+                    tag.update()
+                    console.log(tag.law_part_list)
+                }
+            );
+        };
+
+        tag.setMasterList = () => {
+            tag.law_category_list = opts.lists.law_category_list
+        };
+
+        // ===================================================================================
+        //                                                                        Assist Logic
+        //                                                                        ============
+        tag.getConditions = (page_number = tag.page_number) => {
+            var data = {
+                law_name: tag.refs.law_name.value,
+                search_word: tag.refs.search_word.value,
+                case_category_list: tag.optionsToCdefList('law_category'), // select box
+                page_number: page_number,
+                page_size: tag.page_size
+            }
+            return data
+        }
+
+        tag.optionsToCdefList = refparam => {
+            const cdefList = [];
+            $("[ ref = " + refparam + " ]").siblings('a').each(function () {
+                cdefList.push($(this)[0].getAttribute('data-value'));
+            });
+            return cdefList;
+        }
+    </script>
 </law-list>

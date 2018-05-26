@@ -221,6 +221,7 @@
             const report_list = []
             const paging_part = {}
             const detail_case_number = ''
+            const lists = {};
             tag.western_format = false
 
             tag.page_number = 1 // as default
@@ -230,9 +231,14 @@
             //                                                                               Event
             //                                                                               =====
             tag.on('mount', () => {
-                tag.getMasterList()
                 $('.ui.dropdown').dropdown();
                 $('.ui.long.modal').modal('show');
+            })
+
+            tag.on('update', () => {
+                if (tag.bench_list === undefined) { // updateされるたびに呼び出されるのを防ぐため
+                    tag.setMasterList();
+                }
             })
 
             tag.clearConditions = () => {
@@ -301,22 +307,16 @@
             // ===================================================================================
             //                                                                             Request
             //                                                                             =======
-            tag.getMasterList = () => {
-                request.get(`/master/list`,
-                    (json) => {
-                        const content = JSON.parse(json.text)
-                        tag.bench_list = content.bench_list
-                        tag.case_category_list = content.case_category_list
-                        tag.case_mark_list = helper.unshiftDefault(content.case_mark_list)
-                        tag.court_list = helper.unshiftDefault(content.court_list)
-                        tag.court_type_list = helper.unshiftDefault(content.court_type_list)
-                        tag.era_list = helper.unshiftDefault(content.era_list)
-                        tag.judgement_result_list = content.judgement_result_list
-                        tag.judgement_type_list = content.judgement_type_list
-                        tag.report_list = helper.unshiftDefault(content.report_list)
-                        console.log("got master lists")
-                        tag.update()
-                    });
+            tag.setMasterList = () => {
+                tag.bench_list = opts.lists.bench_list
+                tag.case_category_list = opts.lists.case_category_list
+                tag.case_mark_list = helper.unshiftDefault(opts.lists.case_mark_list)
+                tag.court_list = helper.unshiftDefault(opts.lists.court_list)
+                tag.court_type_list = helper.unshiftDefault(opts.lists.court_type_list)
+                tag.era_list = helper.unshiftDefault(opts.lists.era_list)
+                tag.judgement_result_list = opts.lists.judgement_result_list
+                tag.judgement_type_list = opts.lists.judgement_type_list
+                tag.report_list = helper.unshiftDefault(opts.lists.report_list)
             };
 
             tag.searchRequest = (page_number) => {

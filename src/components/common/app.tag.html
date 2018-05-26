@@ -1,8 +1,8 @@
 <app>
   <header></header>
 
-  <judgement-list class="ui tab active" data-tab="judgement-list"></judgement-list>
-  <!-- <law-list class="ui tab" data-tab="law-list"></law-list> -->
+  <judgement-list class="ui tab active" data-tab="judgement-list" lists="{ content }"></judgement-list>
+  <law-list class="ui tab" data-tab="law-list" lists="{ content }"></law-list>
   <introduce class="ui tab" data-tab="introduce"></introduce>
   <!-- <mypage class="ui tab" data-tab="mypage"></mypage> -->
 
@@ -11,14 +11,27 @@
 
   <script>
     const tag = this
+
     tag.on('mount', () => {
+      tag.getMasterList();
       $('.ui .item').tab();
       $('header .item').on('click', function () {
         $('.ui.menu .item').removeClass('active');
         $(this).addClass('active');
-        tag.update()
       });
       tag.update()
     })
+
+    // ===================================================================================
+    //                                                                             Request
+    //                                                                             =======
+    tag.getMasterList = () => {
+      request.get(`/master/list`,
+        (json) => {
+          content = JSON.parse(json.text)
+          console.log("got master lists")
+          tag.update()
+        });
+    };
   </script>
 </app>
