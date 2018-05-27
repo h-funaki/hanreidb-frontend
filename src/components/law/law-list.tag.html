@@ -16,13 +16,14 @@
                         <i class="info circle icon blue" data-content="結果の取得に時間がかかる場合があります。空白で区切るとアンド検索になります。"></i>
                     </label>
                     <div class="ten wide field">
-                        <input type="text" ref="search_word" placeholder="例：故意または過失" />
+                        <!-- <input type="text" ref="search_word" placeholder="例：故意または過失" /> -->
+                        <input type="text" ref="search_word" placeholder="機能未完成" />
                     </div>
                 </div>
                 <div class="inline fields">
                     <label>カテゴリー</label>
                     <div class="ten wide field">
-                        <select name="" multiple="" ref="case_category" class="ui dropdown">
+                        <select name="" multiple="" ref="law_category" class="ui dropdown">
                             <option value="">事件種別</option>
                             <option each="{ law_category_list }" value="{ value }" id="{value}">{ label }</option>
                         </select>
@@ -41,7 +42,6 @@
                     </div>
                     <div>件ずつ表示</div>
                 </div>
-                <div>現在は条件の絞り込みが効きません</div>
                 <div class="inline fields">
                     <button class="blue ui button left floated" type="submit" onclick="{ searchRequest.bind(this, 1) }">
                         <i class="icon search"></i>検索
@@ -160,7 +160,6 @@
                     tag.paging_part = content.paging_part
                     console.log("got law list. page number:" + page_number + " page size:" + tag.page_size)
                     tag.update()
-                    console.log(tag.law_part_list)
                 }
             );
         };
@@ -176,7 +175,7 @@
             var data = {
                 law_name: tag.refs.law_name.value,
                 search_word: tag.refs.search_word.value,
-                case_category_list: tag.optionsToCdefList('law_category'), // select box
+                law_category_id_list: tag.optionsToCdefList('law_category'), // select box
                 page_number: page_number,
                 page_size: tag.page_size
             }
