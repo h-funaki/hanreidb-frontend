@@ -10,8 +10,9 @@
                         </tr>
                         <tr>
                             <td>事件番号</td>
-                            <td>{ detail.case_mark_part.case_number_era_alias } { detail.case_mark_part.case_number_year} { detail.case_mark_part.case_mark_alias
-                                } { detail.case_mark_part.case_number_serial_number}</td>
+                            <td>{ case_number }
+                                <a if="{ detail.court_web_url }" href="{ detail.court_web_url }" target=”_blank”>(裁判所ウェブサイトリンク)</a>
+                            </td>
                         </tr>
                         <tr>
                             <td>裁判日</td>
@@ -43,6 +44,12 @@
                             <td if="{ detail.appeal_judgement_case_mark_part }" onclick='{ getJudgement.bind(judgement_public_code, detail.appeal_judgement_public_code) }'>
                                 <a>{ detail.appeal_judgement_case_mark_part.case_number_era_alias } { detail.appeal_judgement_case_mark_part.case_number_year}
                                     { detail.appeal_judgement_case_mark_part.case_mark_alias } { detail.appeal_judgement_case_mark_part.case_number_serial_number}</a>
+                            </td>
+                        </tr>
+                        <tr if="{ detail.court_file_url }">
+                            <td>裁判所ウェブサイト判決文ファイル</td>
+                            <td>
+                                <a href="{ detail.court_file_url }" download="{ case_number }" target=”_blank”>PDFファイル</a>
                             </td>
                         </tr>
                     </tbody>
@@ -78,6 +85,9 @@
                     tag.detail = content
                     tag.sentence = tag.formatSentence(content.sentence)
                     tag.showsDetail = true
+                    tag.case_number = content.case_mark_part.case_number_era_alias + content.case_mark_part.case_number_year +
+                        content.case_mark_part.case_mark_alias +
+                        content.case_mark_part.case_number_serial_number
                     tag.update()
                     $('#judgement-modal').modal('refresh'); // リフレッシュしないとモーダルの位置がおかしくなる（tag.detailがupdateされていない状態を元にモーダルが配置される。）
                     $('.scrolling.content').scrollTop(0); // スクロールの位置を元に戻す
