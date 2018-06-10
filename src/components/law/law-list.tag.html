@@ -16,8 +16,8 @@
                         <i class="info circle icon blue" data-content="結果の取得に時間がかかる場合があります。空白で区切るとアンド検索になります。"></i>
                     </label>
                     <div class="ten wide field">
-                        <!-- <input type="text" ref="search_word" placeholder="例：故意または過失" /> -->
-                        <input type="text" ref="search_word" placeholder="機能未完成" />
+                        <input type="text" ref="search_word" placeholder="例：故意または過失" />
+                        <!-- <input type="text" ref="search_word" placeholder="機能未完成" /> -->
                     </div>
                 </div>
                 <div class="inline fields">
@@ -77,11 +77,11 @@
                 </table>
             </div>
         </div>
-    </div>
 
-    <!-- 詳細モーダル -->
-    <div id="law-modal" class="ui full modal">
-        <div class="header">
+        <!-- 詳細モーダル -->
+        <div id="law-modal" class="ui modal">
+            <div class="header">
+            </div>
             <div class="scrolling content">
                 <law-detail ref="detail" data-tab="law-detail"></law-detail>
             </div>
@@ -128,9 +128,6 @@
 
         tag.showDetail = law_public_code => {
             tag.refs.detail.getLaw(law_public_code)
-            //const detail_part = tag.refs.detail.case_mark_part
-            // tag.detail_case_number = detail_part.case_number_era_alias + detail_part.case_number_year +
-            //     detail_part.case_mark_alias + detail_part.case_number_serial_number
             $('#law-modal')
                 .modal({
                     closable: true,
@@ -174,7 +171,7 @@
         tag.getConditions = (page_number = tag.page_number) => {
             var data = {
                 law_name: tag.refs.law_name.value,
-                search_word: tag.refs.search_word.value,
+                law_content: tag.refs.search_word.value,
                 law_category_id_list: tag.optionsToCdefList('law_category'), // select box
                 page_number: page_number,
                 page_size: tag.page_size

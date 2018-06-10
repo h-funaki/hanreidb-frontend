@@ -1,53 +1,64 @@
 <law-detail data-is="law-detail">
-    <div class="ui internally celled grid">
-        <div class="row">
-            <div class="three wide column">
-                <div class="ui bottom attached segment pushable">
-                    <div class="ui visible inverted left vertical sidebar menu">
-                        <a class="item">
-                            <i class="home icon"></i>
-                            Home
-                        </a>
-                        <a class="item">
-                            <i class="block layout icon"></i>
-                            Topics
-                        </a>
-                        <a class="item">
-                            <i class="smile icon"></i>
-                            Friends
-                        </a>
-                        <a class="item">
-                            <i class="calendar icon"></i>
-                            History
-                        </a>
-                    </div>
-                    <div class="pusher">
-                        <div class="ui basic segment">
-                            <h3 class="ui header">Application Content</h3>
-                            <p></p>
-                            <p></p>
-                            <p></p>
-                            <p></p>
-                        </div>
-                    </div>
-                </div>
+    <div class="ui center aligned grid ">
+        <div class="ui center aligned fifteen wide column">
+            <div if="{ showsDetail }">
+                <table class="ui blue table">
+                    <tbody>
+                        <tr>
+                            <td>法令種別</td>
+                            <td>{ detail.law_type_alias }</td>
+                        </tr>
+                        <tr>
+                            <td>法令名</td>
+                            <td>{ detail.law_name }
+                                <div each="{ alias in detail.law_alias_list }">{ alias }</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>法令番号</td>
+                            <td>{ detail.law_number }</td>
+                        </tr>
+                        <tr>
+                            <td>公布日</td>
+                            <td> { detail.promulgation_date }</td>
+                        </tr>
+                        <tr>
+                            <td>施行日</td>
+                            <td> { detail.effective_date != null ? detail.effective_date : 'データなし' }</td>
+                        </tr>
+                        <tr>
+                            <td>カテゴリー</td>
+                            <td>
+                                <div each="{ part in detail.law_category_part_list }">{ part.law_category_alias }</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="ten wide column">
-                <p></p>
-            </div>
-            <div class="three wide column">
-                <img>
-            </div>
+            <div ref='xml'></div>
         </div>
     </div>
-
 
     <style>
     </style>
     <script>
         const tag = this
-        tag.on('mount', () => {
-            $('.icon').popup()
+        tag.on('mount ', () => {
+            $('.icon ').popup()
         })
+
+        tag.getLaw = law_public_code => {
+            request.get(`/law/get/${ law_public_code }`,
+                (json) => {
+                    const content = JSON.parse(json.text)
+                    tag.detail = content
+                    tag.showsDetail = true
+                    tag.refs.xml.insertAdjacentHTML('afterbegin', content.law_content_view_xml);
+                    tag.update()
+                    $('#law-modal ').modal('refresh '); // リフレッシュしないとモーダルの位置がおかしくなる（tag.detailがupdateされていない状態を元にモーダルが配置される。）
+                    $('.scrolling.content ').scrollTop(0); // スクロールの位置を元に戻す
+                    console.log(content.law_category_part_list)
+                });
+        }
     </script>
 </law-detail>

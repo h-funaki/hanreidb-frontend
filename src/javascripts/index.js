@@ -25,6 +25,7 @@ import '../components/common/title-reactive';
 import '../components/judgement/judgement-list';
 import '../components/judgement/judgement-detail';
 import '../components/law/law-list';
+import '../components/law/law-detail';
 import '../components/introduce/introduce';
 import '../components/mypage/mypage';
 
