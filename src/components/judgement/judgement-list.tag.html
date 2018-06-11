@@ -233,6 +233,11 @@
             tag.on('mount', () => {
                 $('.ui.dropdown').dropdown();
                 $('.ui.long.modal').modal('show');
+                $("input").keypress(function (e) {
+                    if (e.which == 13) {
+                        tag.searchRequest(1);
+                    }
+                });
             })
 
             tag.on('update', () => {

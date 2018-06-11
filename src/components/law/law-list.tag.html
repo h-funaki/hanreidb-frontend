@@ -17,7 +17,6 @@
                     </label>
                     <div class="ten wide field">
                         <input type="text" ref="search_word" placeholder="例：故意または過失" />
-                        <!-- <input type="text" ref="search_word" placeholder="機能未完成" /> -->
                     </div>
                 </div>
                 <div class="inline fields">
@@ -108,6 +107,11 @@
 
         tag.on('mount', () => {
             $('.icon').popup()
+            $("input").keypress(function (e) {
+                if (e.which == 13) {
+                    tag.searchRequest(1);
+                }
+            });
         })
 
         tag.on('update', () => {
