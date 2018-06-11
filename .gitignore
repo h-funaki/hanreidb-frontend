@@ -8,5 +8,6 @@
 /dist
 /node_modules
 /src/assets/javascripts/riot-components.js
+/src/javascripts/request.js
 riot-components.js
 .DS_Store
