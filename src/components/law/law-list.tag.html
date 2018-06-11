@@ -107,7 +107,7 @@
 
         tag.on('mount', () => {
             $('.icon').popup()
-            $("input").keypress(function (e) {
+            $("input").keypress(function (e) { // enter keyで検索できるように
                 if (e.which == 13) {
                     tag.searchRequest(1);
                 }
