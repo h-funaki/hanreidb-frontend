@@ -12,13 +12,14 @@
                         <su-dropdown class="fluid" items="{ era_list }" ref="case_number_era"></su-dropdown>
                     </div>
                     <div class="three wide field">
-                        <input class="fluid" type="text" name="" ref="case_number_year" value="" placeholder="29" />年
+                        <input class="fluid" type="text" name="judgement_case_number_year" ref="case_number_year" value="" placeholder="29" />年
                     </div>
                     <div class="three wide field">
                         <su-dropdown class="compact" items="{ case_mark_list }" ref="case_mark" search="true"></su-dropdown>
                     </div>
                     <div class="three wide field">
-                        <input class="fluid" type="text" name="" ref="case_number_serial_number" value="" placeholder="1234" />
+                        <input class="fluid" type="text" name="judgement_case_number_serial_number" ref="case_number_serial_number" value="" placeholder="1234"
+                        />
                     </div>
                 </div>
                 <div class="inline fields">
@@ -30,12 +31,12 @@
                     </div>
                     第
                     <div class="three wide field">
-                        <input type="text" name="" ref="report_kan" />巻
+                        <input type="text" name="judgement_report_kan" ref="report_kan" />巻
                     </div>
                     <div class="three wide field">
-                        <input type="text" name="" ref="report_go" />号</div>
+                        <input type="text" name="judgement_report_go" ref="report_go" />号</div>
                     <div class="three wide field">
-                        <input type="text" name="" ref="report_ko" />頁</div>
+                        <input type="text" name="judgement_report_ko" ref="report_ko" />頁</div>
                 </div>
             </div>
             <!-- 右の検索条件 -->
@@ -43,14 +44,14 @@
                 <div class="inline fields">
                     <label>事件名</label>
                     <div class="six wide field">
-                        <input type="text" name="" ref="case_name" value="" />
+                        <input type="text" name="judgement_case_name" ref="case_name" value="" />
                     </div>
                 </div>
                 <div class="inline fields">
                     <label>全文検索
                     </label>
                     <div class="six wide field">
-                        <input type="text" name="" ref="search_word" value="" />
+                        <input type="text" name="judgement_search_word" ref="search_word" value="" />
                     </div>
                 </div>
                 <div class="inline fields" if="{ western_format }">
@@ -58,11 +59,11 @@
                         <i class="calendar icon" onClick="{ setWestern.bind(this, false) }"></i>
                     </label>
                     <div class="six wide field">
-                        <input type="date" name="" ref="judgement_date_from" value="" />
+                        <input type="date" name="judgement_date_from" ref="judgement_date_from" value="" />
                     </div>
                     <div class="one wide field">~</div>
                     <div class="six wide field">
-                        <input type="date" name="" ref="judgement_date_to" value="" />
+                        <input type="date" name="judgement_date_to" ref="judgement_date_to" value="" />
                     </div>
                 </div>
                 <div class="inline fields" if="{ !western_format }">
@@ -73,13 +74,13 @@
                         <su-dropdown class="fluid" items="{ era_list }" ref="judgement_date_from_era"></su-dropdown>
                     </div>
                     <div class="three wide field">
-                        <input type="text" name="" ref="judgement_date_from_year" value="" />年
+                        <input type="text" name="judgement_date_from_year" ref="judgement_date_from_year" value="" />年
                     </div>
                     <div class="three wide field">
-                        <input type="text" name="" ref="judgement_date_from_month" value="" />月
+                        <input type="text" name="judgement_date_from_month" ref="judgement_date_from_month" value="" />月
                     </div>
                     <div class="three wide field">
-                        <input type="text" name="" ref="judgement_date_from_day" value="" />日
+                        <input type="text" name="judgement_date_from_day" ref="judgement_date_from_day" value="" />日
                     </div>
                 </div>
                 <div class="inline fields" if="{ !western_format }">
@@ -89,13 +90,13 @@
                         <su-dropdown class="fluid" items="{ era_list }" ref="judgement_date_to_era"></su-dropdown>
                     </div>
                     <div class="three wide field">
-                        <input type="text" name="" ref="judgement_date_to_year" value="" />年
+                        <input type="text" name="judgement_date_to_year" ref="judgement_date_to_year" value="" />年
                     </div>
                     <div class="three wide field">
-                        <input type="text" name="" ref="judgement_date_to_month" value=""></input>月
+                        <input type="text" name="judgement_date_to_month" ref="judgement_date_to_month" value=""></input>月
                     </div>
                     <div class="three wide field">
-                        <input type="text" name="" ref="judgement_date_to_day" value="" />日
+                        <input type="text" name="judgement_date_to_day" ref="judgement_date_to_day" value="" />日
                     </div>
                 </div>
                 <div class="inline fields">
@@ -119,21 +120,21 @@
                 <div class="inline fields">
                     <label>裁判種別</label>
                     <div each="{ judgement_type_list }" class="ui checkbox">
-                        <input type="checkbox" ref='judgement_type' name="" value="{ value }" id="{ value }" />
+                        <input type="checkbox" ref='judgement_type' name="judgement_type" value="{ value }" id="{ value }" />
                         <label for="{ value }">{ label + "　"}</label>
                     </div>
                 </div>
                 <div class="inline fields">
                     <label>裁判結果</label>
                     <div each="{ judgement_result_list }" class="ui checkbox">
-                        <input type="checkbox" ref='judgement_result' name="" value="{ value }" id="{ value }" />
+                        <input type="checkbox" ref='judgement_result' name="judgement_result" value="{ value }" id="{ value }" />
                         <label for="{ value }">{ label + "　"}</label>
                     </div>
                 </div>
                 <div class="inline fields">
                     <label>法廷</label>
                     <div each="{ bench_list }" class="ui checkbox">
-                        <input type="checkbox" ref='bench' name="" value="{ value }" id="{ value }" />
+                        <input type="checkbox" ref='bench' name="judgement_bench" value="{ value }" id="{ value }" />
                         <label for="{ value }">{ label + "　"}</label>
                     </div>
                 </div>
@@ -233,7 +234,7 @@
             tag.on('mount', () => {
                 $('.ui.dropdown').dropdown();
                 $('.ui.long.modal').modal('show');
-                $("input").keypress(function (e) { // enter keyで検索できるように
+                $("input[name^=judgement]").keypress(function (e) { // enter keyで検索できるように
                     if (e.which == 13) {
                         tag.searchRequest(1);
                     }

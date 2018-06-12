@@ -8,7 +8,7 @@
                         <i class="info circle icon blue" data-content="「明治二十九年法律第八十九号」などの法令番号や「国賠法」などの略称での検索も可能です。空白で区切るとアンド検索になります。"></i>
                     </label>
                     <div class="ten wide field">
-                        <input type="text" ref="law_name" placeholder="例：国賠法" />
+                        <input type="text" name="law_name" ref="law_name" placeholder="例：国賠法" />
                     </div>
                 </div>
                 <div class="inline fields">
@@ -16,7 +16,7 @@
                         <i class="info circle icon blue" data-content="結果の取得に時間がかかる場合があります。空白で区切るとアンド検索になります。"></i>
                     </label>
                     <div class="ten wide field">
-                        <input type="text" ref="search_word" placeholder="例：故意または過失" />
+                        <input type="text" name="law_search_word" ref="search_word" placeholder="例：故意または過失" />
                     </div>
                 </div>
                 <div class="inline fields">
@@ -107,7 +107,7 @@
 
         tag.on('mount', () => {
             $('.icon').popup()
-            $("input").keypress(function (e) { // enter keyで検索できるように
+            $("input[name^=law]").keypress(function (e) { // enter keyで検索できるように
                 if (e.which == 13) {
                     tag.searchRequest(1);
                 }
