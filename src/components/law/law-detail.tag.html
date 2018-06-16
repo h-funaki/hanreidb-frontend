@@ -35,11 +35,15 @@
                     </tbody>
                 </table>
             </div>
-            <div ref='xml'></div>
+            <div class="row"> </div>
+            <div class="" ref='xml'></div>
         </div>
     </div>
 
     <style>
+        .row {
+            margin-bottom: 30px;
+        }
     </style>
     <script>
         const tag = this
@@ -53,11 +57,11 @@
                     const content = JSON.parse(json.text)
                     tag.detail = content
                     tag.showsDetail = true
+                    $("div[ref='xml']").empty();
                     tag.refs.xml.insertAdjacentHTML('afterbegin', content.law_content_view_xml);
                     tag.update()
                     $('#law-modal ').modal('refresh '); // リフレッシュしないとモーダルの位置がおかしくなる（tag.detailがupdateされていない状態を元にモーダルが配置される。）
                     $('.scrolling.content ').scrollTop(0); // スクロールの位置を元に戻す
-                    console.log(content.law_category_part_list)
                 });
         }
     </script>
