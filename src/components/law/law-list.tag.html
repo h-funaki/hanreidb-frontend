@@ -52,7 +52,7 @@
             </div>
 
             <div class="row"></div>
-            <div class="ui segment" if="{ searching }">
+            <div class="ui segment fourteen wide column" if="{ searching }">
                 <div class="ui active loader"></div>
                 <p></p>
             </div>
@@ -157,6 +157,7 @@
         //                                                                             Request
         //                                                                             =======
         tag.searchRequest = (page_number) => {
+            tag.law_part_list = null;
             tag.searching = true;
             request.post(`/law/list`,
                 tag.getConditions(page_number),

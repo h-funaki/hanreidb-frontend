@@ -158,7 +158,7 @@
                     <i class="icon ban"></i>クリア
                 </button>
             </div>
-            <div class="ui segment" if="{ searching }">
+            <div class="ui segment fourteen wide column" if="{ searching }">
                 <div class="ui active loader"></div>
                 <p></p>
             </div>
@@ -330,6 +330,7 @@
             };
 
             tag.searchRequest = (page_number) => {
+                tag.judgement_list = null;
                 tag.searching = true;
                 request.post(`/judgement/list`,
                     tag.getConditions(page_number),
