@@ -158,6 +158,10 @@
                     <i class="icon ban"></i>クリア
                 </button>
             </div>
+            <div class="ui segment" if="{ searching }">
+                <div class="ui active loader"></div>
+                <p></p>
+            </div>
 
             <div class="center aligned fourteen wide column" if="{ judgement_list }">
                 <pagination data-tab="pagination" paging="{ paging_part }"></pagination>
@@ -326,6 +330,7 @@
             };
 
             tag.searchRequest = (page_number) => {
+                tag.searching = true;
                 request.post(`/judgement/list`,
                     tag.getConditions(page_number),
                     (json) => {
@@ -334,6 +339,7 @@
                         tag.paging_part = content.paging_part
                         console.log("got judgements list. page number:" + page_number + " page size:" + tag.page_size)
                         $('.ui.star.rating').rating();
+                        tag.searching = false;
                         tag.update()
                     }
                 );
