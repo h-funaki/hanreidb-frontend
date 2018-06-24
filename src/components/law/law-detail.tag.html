@@ -46,8 +46,19 @@
         }
 
         h5 {
-            font-size: 18px;
+            font-size: 16px;
+            font-weight: bold;
             display: inline;
+        }
+
+        h6 {
+            font-size: 14px;
+            font-weight: bold;
+            display: inline;
+        }
+
+        MainProvision article {
+            text-align: left;
         }
     </style>
     <script>
@@ -55,6 +66,18 @@
         tag.on('mount ', () => {
             $('.icon ').popup()
         })
+        $('a[href^="#"]').click(function () {
+            console.log("s")
+            var speed = 800;
+            var href = $(this).attr("href");
+            var target = $(href == "#" || href ==
+                "" ? 'html' : href);
+            var position = target.offset().top;
+            $("html, body").animate({
+                scrollTop: position
+            }, speed, "swing");
+            return false;
+        });
 
         tag.getLaw = law_public_code => {
             request.get(`/law/get/${ law_public_code }`,
