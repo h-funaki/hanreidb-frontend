@@ -36,7 +36,9 @@
                 </table>
             </div>
             <div class="row"> </div>
-            <div class="" ref='xml'></div>
+            <div class="ui grid">
+                <div class="" ref='xml'></div>
+            </div>
         </div>
     </div>
 
@@ -45,16 +47,60 @@
             margin-bottom: 30px;
         }
 
-        h5 {
-            font-size: 16px;
+        PartTitle,
+        ChapterTitle,
+        SectionTitle,
+        SubsectionTitle,
+        DivisionTitle,
+        TOCSupplProvision,
+        SupplProvisionLabel {
             font-weight: bold;
-            display: inline;
+            line-height: 30px;
         }
 
-        h6 {
+        TOC ChapterTitle {
+            padding-left: 1em;
+        }
+
+        TOC SectionTitle {
+            padding-left: 2em;
+        }
+
+        TOC SubsectionTitle {
+            padding-left: 3em;
+        }
+
+        TOC DivisionTitle {
+            padding-left: 4em;
+        }
+
+        PartTitle {
+            font-size: 22px;
+        }
+
+        ChapterTitle {
+            font-size: 20px;
+        }
+
+        SectionTitle {
+            font-size: 18px;
+        }
+
+        SubsectionTitle {
+            font-size: 16px;
+        }
+
+        DivisionTitle {
             font-size: 14px;
-            font-weight: bold;
-            display: inline;
+        }
+
+        TOCSupplProvision,
+        SupplProvisionLabel {
+            font-size: 16px;
+        }
+
+        TOC {
+            text-align: left;
         }
 
         MainProvision article {
@@ -87,6 +133,9 @@
                     tag.showsDetail = true
                     $("div[ref='xml']").empty();
                     tag.refs.xml.insertAdjacentHTML('afterbegin', content.law_content_view_xml);
+                    console.log($("div[name=law-modal-header]"))
+                    $("div[name=law-modal-header]")[0].innerText = content.law_name
+                    console.log($("div[name=law-modal-header]"))
                     tag.update()
                     $('#law-modal ').modal('refresh '); // リフレッシュしないとモーダルの位置がおかしくなる（tag.detailがupdateされていない状態を元にモーダルが配置される。）
                     $('.scrolling.content ').scrollTop(0); // スクロールの位置を元に戻す
