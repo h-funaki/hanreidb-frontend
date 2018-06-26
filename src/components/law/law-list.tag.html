@@ -68,7 +68,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr each="{ law_part_list }" onclick="{ showDetail.bind( this, law_public_code ) }">
+                        <tr each="{ law_part_list }" onclick="{ showDetail.bind( this, law_public_code, law_name ) }">
                             <td class="center aligned">{ law_number }</td>
                             <td class="center aligned">{ law_name }</td>
                             <td class="center aligned">
@@ -134,8 +134,8 @@
             $('.ui.label.transition.visible').remove()
         }
 
-        tag.showDetail = law_public_code => {
-            tag.refs.detail.getLaw(law_public_code)
+        tag.showDetail = (law_public_code, law_name) => {
+            tag.refs.detail.getLaw(law_public_code, law_name)
             $('#law-modal')
                 .modal({
                     closable: true,

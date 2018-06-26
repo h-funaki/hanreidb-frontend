@@ -1,18 +1,18 @@
 <law-detail data-is="law-detail">
     <div class="ui center aligned grid ">
         <div class="ui center aligned fifteen wide column">
+            <div class="ui segment">
+                <div class="ui active inverted dimmer" if="{ searching }">
+                    <div class="ui text loader">Loading</div>
+                </div>
+                <p></p>
+            </div>
             <div if="{ showsDetail }">
                 <table class="ui blue table">
                     <tbody>
                         <tr>
                             <td>法令種別</td>
                             <td>{ detail.law_type_alias }</td>
-                        </tr>
-                        <tr>
-                            <td>法令名</td>
-                            <td>{ detail.law_name }
-                                <div each="{ alias in detail.law_alias_list }">{ alias }</div>
-                            </td>
                         </tr>
                         <tr>
                             <td>法令番号</td>
@@ -125,7 +125,11 @@
             return false;
         });
 
-        tag.getLaw = law_public_code => {
+        tag.getLaw = (law_public_code, law_name) => {
+            tag.showsDetail = false;
+            $("div[name=law-modal-header]")[0].innerText = law_name;
+            $("div[ref='xml']").empty();
+            tag.searching = true;
             request.get(`/law/get/${ law_public_code }`,
                 (json) => {
                     const content = JSON.parse(json.text)
@@ -133,11 +137,9 @@
                     tag.showsDetail = true
                     $("div[ref='xml']").empty();
                     tag.refs.xml.insertAdjacentHTML('afterbegin', content.law_content_view_xml);
-                    console.log($("div[name=law-modal-header]"))
-                    $("div[name=law-modal-header]")[0].innerText = content.law_name
-                    console.log($("div[name=law-modal-header]"))
+                    tag.searching = false;
                     tag.update()
-                    $('#law-modal ').modal('refresh '); // リフレッシュしないとモーダルの位置がおかしくなる（tag.detailがupdateされていない状態を元にモーダルが配置される。）
+                    $('#law-modal ').modal('refresh'); // リフレッシュしないとモーダルの位置がおかしくなる（tag.detailがupdateされていない状態を元にモーダルが配置される。）
                     $('.scrolling.content ').scrollTop(0); // スクロールの位置を元に戻す
                 });
         }
