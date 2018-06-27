@@ -4,7 +4,7 @@ export default class Request {
 
   constructor() {
     // this.apiPrefix = 'http://localhost:9001/hanreidb';
-    this.apiPrefix = 'http://35.200.44.89:8080/hanreidb';
+    this.apiPrefix = 'http://35.200.44.89:80/hanreidb';
     this.validator = new Validator();
   }
 
