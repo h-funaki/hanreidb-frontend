@@ -63,7 +63,7 @@ gulp.task('prodserver', function () {
       open: true,
       proxies: [{
         source: '/api',
-        target: 'http://35.200.44.89:10000/hanreidb/'
+        target: 'https://35.200.44.89:10000/hanreidb/'
       }]
     }));
 });
