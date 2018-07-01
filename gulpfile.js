@@ -56,6 +56,7 @@ gulp.task('prodserver', function () {
       livereload: true,
       directoryListening: true,
       fallback: 'index.html',
+      https: true,
       open: true,
       // proxies: [{
       //   source: '/api', // 
@@ -72,6 +73,7 @@ gulp.task('devserver', function () {
       livereload: true,
       directoryListening: true,
       fallback: 'index.html',
+      // https: true,
       open: true,
       proxies: [{
         source: '/api',
