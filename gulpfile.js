@@ -56,7 +56,10 @@ gulp.task('prodserver', function () {
       livereload: true,
       directoryListening: true,
       fallback: 'index.html',
-      https: true,
+      https: {
+        key: 'cert.key',
+        cert: 'cert.pem'
+      },
       open: true,
       // proxies: [{
       //   source: '/api', // 

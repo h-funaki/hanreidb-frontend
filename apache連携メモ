@@ -1,0 +1,24 @@
+6/27
+
+apacheをport10000で起動（デフォルト80だがフロント側のサーバーが80を使用しているため）
+sudo vi /etc/httpd/conf/httpd.conf
+Listen 80 -> Listen 10000
+
+
+gcpのファイアーウォールで10000を許可するように修正
+
+centosのファイアーウォールで10000を許可するように修正
+sudo firewall-cmd --add-port=10000/tcp --zone=trusted --permanent
+sudo firewall-cmd --list-all
+
+tomcatとマッピング
+sudo vi /etc/httpd/conf.d/proxy-ajp.conf
+<Location /hanreidb >
+  ProxyPass ajp://localhost:8009/hanreidb
+  Order allow,deny
+  Allow from all
+</Location>
+
+tomcat 8009portが開いていることを確認
+8080httpを閉じる
+https://qiita.com/Dace_K/items/9d0419aefcb969335ca5 を参照
