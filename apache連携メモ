@@ -22,3 +22,8 @@ sudo vi /etc/httpd/conf.d/proxy-ajp.conf
 tomcat 8009portが開いていることを確認
 8080httpを閉じる
 https://qiita.com/Dace_K/items/9d0419aefcb969335ca5 を参照
+
+7/1
+
+10000 を 10001にして
+10000はhttpsようにした
