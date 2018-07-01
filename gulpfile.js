@@ -61,11 +61,10 @@ gulp.task('prodserver', function () {
         cert: 'cert.pem'
       },
       open: true,
-      // proxies: [{
-      //   source: '/api', // 
-      //   target: 'http://35.200.44.89:9001/hanreidb/'
-      //   // target: 'https://hanreidb.appspot.com/'
-      // }]
+      proxies: [{
+        source: '/api',
+        target: 'http://35.200.44.89:10000/hanreidb/'
+      }]
     }));
 });
 
