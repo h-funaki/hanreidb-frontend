@@ -158,6 +158,10 @@ https://www.apps-gcp.com/zerossl-letsencrypt/#ZeroSSL_SSL
 【apacheのSSL化】
 https://qiita.com/jinnai73/items/638dcc1434d47b12e6ba
 
+cert.key を /etc/httpd/conf/ssl.key/server.key
+cert.pem を /etc/httpd/conf/ssl.crt/server.crt
+にコピー
+
  sudo vi /etc/httpd/conf.d/ssl.conf
  3箇所443から10000に
  ＊tomcatは関係ない
