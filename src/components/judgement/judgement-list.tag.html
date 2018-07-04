@@ -48,28 +48,49 @@
                     </div>
                 </div>
                 <div class="inline fields">
-                    <label>全文検索
-                    </label>
+                    <label>全文検索</label>
                     <div class="six wide field">
                         <input type="text" name="judgement_search_word" ref="search_word" value="" />
                     </div>
                 </div>
+                <div class="inline fields">
+                    <label>裁判日</label>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="calendar_type" checked="checked" onclick="{ setWestern.bind(this, false) }">
+                            <label>和暦</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="calendar_type" onclick="{ setWestern.bind(this, true) }">
+                            <label>西暦</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="calendar_term" checked="checked" onclick="{ setCalendarType.bind(this, false) }">
+                            <label>期日</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="calendar_term" onclick="{ setCalendarType.bind(this, true) }">
+                            <label>期間</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="inline fields" if="{ western_format }">
-                    <label>裁判日
-                        <i class="calendar icon" onClick="{ setWestern.bind(this, false) }"></i>
-                    </label>
+                    <div class="one wide field"></div>
                     <div class="six wide field">
                         <input type="date" name="judgement_date_from" ref="judgement_date_from" value="" />
                     </div>
-                    <div class="one wide field">~</div>
-                    <div class="six wide field">
+                    <div class="one wide field" if="{ is_calendar_type_term }">~</div>
+                    <div class="six wide field" if="{ is_calendar_type_term }">
                         <input type="date" name="judgement_date_to" ref="judgement_date_to" value="" />
                     </div>
                 </div>
                 <div class="inline fields" if="{ !western_format }">
-                    <label>裁判日
-                        <i class="calendar icon" onClick="{ setWestern.bind(this, true) }"></i>
-                    </label>
                     <div class="three wide field">
                         <su-dropdown class="fluid" items="{ era_list }" ref="judgement_date_from_era"></su-dropdown>
                     </div>
@@ -83,7 +104,7 @@
                         <input type="text" name="judgement_date_from_day" ref="judgement_date_from_day" value="" />日
                     </div>
                 </div>
-                <div class="inline fields" if="{ !western_format }">
+                <div class="inline fields" if="{ !western_format && is_calendar_type_term }">
                     <div class="three wide field"></div>
                     <div class="one wide field">~</div>
                     <div class="three wide field">
@@ -238,6 +259,7 @@
             const detail_case_number = ''
             const lists = {};
             tag.western_format = false
+            tag.is_calendar_type_term = false
 
             tag.page_number = 1 // as default
             tag.page_size = 25 // as default
@@ -273,16 +295,20 @@
                 tag.refs.report_ko.value = ''
                 if (tag.western_format) {
                     tag.refs.judgement_date_from.value = ''
-                    tag.refs.judgement_date_to.value = ''
+                    if (tag.is_calendar_type_term) {
+                        tag.refs.judgement_date_to.value = ''
+                    }
                 } else {
                     tag.refs.judgement_date_from_era.value = ''
                     tag.refs.judgement_date_from_year.value = ''
                     tag.refs.judgement_date_from_month.value = ''
                     tag.refs.judgement_date_from_day.value = ''
-                    tag.refs.judgement_date_to_era.value = ''
-                    tag.refs.judgement_date_to_year.value = ''
-                    tag.refs.judgement_date_to_month.value = ''
-                    tag.refs.judgement_date_to_day.value = ''
+                    if (tag.is_calendar_type_term) {
+                        tag.refs.judgement_date_to_era.value = ''
+                        tag.refs.judgement_date_to_year.value = ''
+                        tag.refs.judgement_date_to_month.value = ''
+                        tag.refs.judgement_date_to_day.value = ''
+                    }
                 }
                 tag.refs.court.multiple = ''
                 tag.refs.case_name.value = ''
@@ -321,6 +347,10 @@
                 tag.update()
             }
 
+            tag.setCalendarType = boolean => {
+                tag.is_calendar_type_term = boolean
+                tag.update()
+            }
             // ===================================================================================
             //                                                                             Request
             //                                                                             =======
@@ -345,7 +375,8 @@
                         const content = JSON.parse(json.text)
                         tag.judgement_list = content.judgement_list
                         tag.paging_part = content.paging_part
-                        console.log("got judgements list. page number:" + page_number + " page size:" + tag.page_size)
+                        console.log("got judgements list. page number:" + page_number + " page size:" + tag
+                            .page_size)
                         $('.ui.star.rating').rating();
                         tag.searching = false;
                         tag.update()
@@ -370,7 +401,8 @@
                     case_number_era: tag.refs.case_number_era.value,
                     case_number_year: format.formatToJsonInteger(tag.refs.case_number_year.value),
                     case_mark_id: format.formatToJsonInteger(tag.refs.case_mark.value),
-                    case_number_serial_number: format.formatToJsonInteger(tag.refs.case_number_serial_number.value),
+                    case_number_serial_number: format.formatToJsonInteger(tag.refs.case_number_serial_number
+                        .value),
                     court_id_list: tag.optionsToIntegerList('court'), // select box
                     bench_list: tag.checkboxesToCdefList(tag.refs.bench),
                     judgement_result_list: tag.checkboxesToCdefList(tag.refs.judgement_result),
@@ -401,6 +433,9 @@
             }
 
             tag.getJudgementDateTo = () => {
+                if (!tag.is_calendar_type_term) {
+                    return null
+                }
                 if (tag.western_format) {
                     return format.formatToJsonDate(tag.refs.judgement_date_to.value)
                 } else {
